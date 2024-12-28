@@ -10,15 +10,12 @@ const Navbar = () => {
   return (
     <nav className="bg-slate-800 text-white shadow-md">
       <div className="container mx-auto px-4 md:px-8  flex justify-between items-center">
-
-        {/* Logo */}
         <div className="text-2xl font-bold">
           <Link to="/">
             <img className='w-20' src={logo} alt="" />
           </Link>
         </div>
 
-        {/* Hamburger Menu (Mobile View) */}
         <div className="md:hidden">
           <button
             onClick={() => setIsOpen(!isOpen)}
@@ -41,7 +38,7 @@ const Navbar = () => {
           </button>
         </div>
 
-        {/* Navbar Links */}
+       
         <div
           className={`${isOpen ? "block" : "hidden"
             } md:flex md:items-center md:space-x-6 absolute md:static top-16 left-0 w-full md:w-auto bg-slate-800 md:bg-transparent space-y-4 md:space-y-0 px-4 py-4 md:p-0 z-50`}

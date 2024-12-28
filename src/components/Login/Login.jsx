@@ -59,7 +59,7 @@ const Login = () => {
             <h2 className="text-xl text-center text-gray-600 font-bold uppercase">
               Log in
             </h2>
-            {/* <Link to='/home' >home</Link> */}
+           
             <div className="mt-6">
               <label
                 htmlFor="email"
