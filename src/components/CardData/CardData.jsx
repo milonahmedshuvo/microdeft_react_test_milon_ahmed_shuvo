@@ -6,8 +6,8 @@ const CardData = () => {
     const [data, setData] = useState(null)
     const token = localStorage.getItem('authToken')
 
-    console.log('Data fetch:', data?.data?.data, 'token:', token)
 
+    console.log({ token, data })
 
     useEffect(() => {
 
@@ -35,9 +35,8 @@ const CardData = () => {
             {data?.data?.data?.slice(1, 10).map((card, i) => (
                 <div key={i} className="card">
                     <div className="card-image-parent">
-                       <img className="card-image" src={card.image} alt="" />
+                        <img className="card-image" src={card.image} alt="" />
                     </div>
-                   
 
                     <div className="card-content">
                         <div className="card-header">
@@ -45,12 +44,12 @@ const CardData = () => {
                             <p className="instructor-name">{card.instructor_name}</p>
                         </div>
                         <h3 className="card-title">{card.title}</h3>
-                        <p className="card-description">{card.description}</p>
+                        <p className="card-description">{`${card.description.length >=100 ? card.description.slice(0,100,)+'...': card.description}`}</p>
+                        <button className="view-details-btn">View Details</button>
                     </div>
                 </div>
             ))}
         </div>
-
     )
 }
 

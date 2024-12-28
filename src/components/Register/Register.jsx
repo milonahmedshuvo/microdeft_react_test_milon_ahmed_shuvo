@@ -1,27 +1,19 @@
 /* eslint-disable no-unused-vars */
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import toast from 'react-hot-toast'
-import { Link, useNavigate } from 'react-router'
+import { Link } from 'react-router'
 
 
 
 const Register = () => {
-  const [name, setName ] = useState("")  
+  const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState("")
   const [data, setData] = useState({})
-  const navigate = useNavigate()
 
-  console.log("data::", data)
-  console.log('message', data?.data?.status_message)
- 
-  useEffect(() => {
-    if (data?.data?.data.status_message) {
-      toast.success('Success! Register successful.')
-    }
-  }, [data])
+
 
 
   const handleSubmit = async (e) => {
@@ -30,24 +22,26 @@ const Register = () => {
     setName('')
     setEmail('')
     setPassword('')
-    console.log({name, email, password})
+    console.log({ name, email, password })
 
     try {
       const response = await axios.post('https://react-interview.crd4lc.easypanel.host/api/register', { name, email, password },
         {
-            headers : {
-                Accept: 'application/json'
-            }
+          headers: {
+            Accept: 'application/json'
+          }
         }
       )
 
       setData(response)
       const { token } = response.data.data
       localStorage.setItem('authToken', token)
-      navigate('/home')
+      if (response?.data?.status === true) {
+        toast.success('Register is successfull.')
+      }
     } catch (err) {
       if (err?.message) {
-        toast.error('Request failed with status code 422')
+        toast.error('Register failed. Please check your data')
       }
     } finally {
       setLoading(false)
@@ -58,15 +52,15 @@ const Register = () => {
 
 
 
-  
+
 
 
   return (
-    <div>
-      <div className="w-full flex justify-center items-center bg-gray-100 p-4 mt-20">
-        <form className='w-full  lg:w-1/3' onSubmit={handleSubmit} >
-          <h2 className='text-2xl text-center text-gray-800 font-bold '>Register</h2>
-          <Link to='/home' >home</Link>
+    <div className="px-3 md:px-5">
+      <div className="lg:w-2/5 mx-auto my-16">
+        <form className="w-full py-8 px-5 md:px-10 bg-gray-100 rounded" onSubmit={handleSubmit} >
+          <h2 className='text-xl text-center text-gray-600 font-bold uppercase'>Register</h2>
+
 
           <div className='mt-6'>
             <label htmlFor='name' className='block text-sm font-medium text-gray-700 mb-1' >Name</label>
@@ -74,8 +68,8 @@ const Register = () => {
               type="text"
               id='name'
               value={name}
-              onChange={(e) =>setName(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none "
+              onChange={(e) => setName(e.target.value)}
+              className="w-full px-4 py-3 text-[15px] border border-gray-300 rounded  focus:outline-none "
               placeholder="Enter your name"
               required
             />
@@ -89,7 +83,7 @@ const Register = () => {
               id='email'
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none "
+              className="w-full px-4 py-3 text-[15px] border border-gray-300 rounded-lg focus:outline-none "
               placeholder="Enter your email"
               required
             />
@@ -102,7 +96,7 @@ const Register = () => {
               id='password'
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none "
+              className="w-full px-4 py-3 text-[15px] border border-gray-300 rounded-lg focus:outline-none "
               placeholder="Enter your password"
               required
             />
@@ -110,12 +104,12 @@ const Register = () => {
 
           <button
             type='submit'
-            className='w-full bg-blue-600 text-white font-medium py-2 mt-8 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300'
+            className='w-full bg-blue-600 text-white font-medium py-2 text-sm md:text-lg mt-8 rounded hover:bg-blue-700 focus:ring-4 focus:ring-blue-300'
             disabled={loading}
           >
             {loading ? 'Register in..' : 'Register'}
           </button>
-
+          <p className="mt-3">Already have an account? please <Link className="font-semibold text-blue-600" to='/' >Login</Link></p>
         </form>
       </div>
 
@@ -123,4 +117,4 @@ const Register = () => {
   )
 }
 
-export default Register
+export default Register;

@@ -4,6 +4,7 @@ import Login from "../../components/Login/Login";
 import CardData from "../../components/CardData/CardData";
 import Layout from "../Layout/Layout";
 import Register from "../../components/Register/Register";
+import CreateData from "../../components/CreateData/CreateData";
 
 export const Routes = createBrowserRouter([
     {
@@ -22,6 +23,10 @@ export const Routes = createBrowserRouter([
                 path: '/home',
                 element: <CardData/>
             },
+            {
+                path: '/home/createData',
+                element: <CreateData/>
+            }
             
         ]
     }

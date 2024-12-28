@@ -1,120 +1,130 @@
 /* eslint-disable no-unused-vars */
-import axios from 'axios'
-import React, { useEffect, useState } from 'react'
-import toast from 'react-hot-toast'
-import { Link, useNavigate } from 'react-router'
+import axios from "axios";
+import React, { useState } from "react";
+import toast from "react-hot-toast";
 
-
+import { Link, useNavigate } from "react-router";
 
 const Login = () => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState("")
-  const [data, setData] = useState({})
   const navigate = useNavigate()
-
- 
-  useEffect(() => {
-    if (data?.data?.status_message) {
-      toast.success('Success! Login successful.')
-    }
-  }, [data])
 
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
     setLoading(true)
-    setEmail('')
-    setPassword('')
 
     try {
-      const response = await axios.post('https://react-interview.crd4lc.easypanel.host/api/login', { email, password })
+      const response = await axios.post(
+        "https://react-interview.crd4lc.easypanel.host/api/login",
+        { email, password }
+      )
 
-      setData(response)
       const { token } = response.data.data
-      // console.log({response})
-      localStorage.setItem('authToken', token)
-      navigate('/home')
+
+      if (response?.data?.status === true) {
+        toast.success("Login successful!")
+        localStorage.setItem("authToken", token)
+        navigate('/home')
+      } else {
+        toast.error("Login failed. Please check your data");
+      }
     } catch (err) {
-      if (err?.message) {
-        toast.error('Request failed with status code 422')
+      if (err.response && err.response.status === 422) {
+        toast.error("Request failed")
+      } else {
+        toast.error("Failed Login. Please try again.")
       }
     } finally {
       setLoading(false)
     }
-
-  }
-
-
-
+  };
 
   const handleDataLogin = (e) => {
-    e.preventDefault()
-    setEmail('naim.microdeft@gmail.com')
-    setPassword('12345678')
-  }
-
+    e.preventDefault();
+    setEmail("naim.microdeft@gmail.com")
+    setPassword("12345678")
+  };
 
   return (
-    <div>
-      <div className="w-full flex justify-center items-center bg-gray-100 p-4 mt-20">
+    <div className="px-3 md:px-5">
+      <div className="lg:w-2/5 mx-auto my-16">
 
-
-        <form className='w-full  lg:w-1/3' onSubmit={handleSubmit} >
-
-          <h2 className='text-2xl text-center text-gray-800 font-bold '>Login</h2>
-          <Link to='/home' >home</Link>
-          <div className='mt-6'>
-            <label htmlFor='email' className='block text-sm font-medium text-gray-700 mb-1' >Email</label>
-            <input
-              type="email"
-              id='email'
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none "
-              placeholder="Enter your email"
-              required
-            />
-          </div>
-
-          <div className='mt-3'>
-            <label htmlFor='password' className='block text-sm font-medium text-gray-700 mb-1' >password</label>
-            <input
-              type="password"
-              id='password'
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none "
-              placeholder="Enter your password"
-              required
-            />
-          </div>
-
-          <button
-            type='submit'
-            className='w-full bg-blue-600 text-white font-medium py-2 mt-8 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300'
-            disabled={loading}
+          <form
+            className="w-full py-8 px-5 md:px-10 bg-gray-100 rounded"
+            onSubmit={handleSubmit}
           >
-            {loading ? 'Logging in..' : 'Login'}
-          </button>
+            <h2 className="text-xl text-center text-gray-600 font-bold uppercase">
+              Log in
+            </h2>
+            {/* <Link to='/home' >home</Link> */}
+            <div className="mt-6">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Email
+              </label>
+              <input
+                type="email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full px-4 py-3 border text-[15px] border-gray-300 rounded focus:outline-none "
+                placeholder="Enter your email"
+                required
+              />
+            </div>
 
-        </form>
+            <div className="mt-3">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                password
+              </label>
+              <input
+                type="password"
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-4 py-3 border text-[15px] border-gray-300 rounded focus:outline-none "
+                placeholder="Enter your password"
+                required
+              />
+            </div>
 
+            <button
+              type="submit"
+              className="w-full bg-blue-600 text-white font-medium py-2 mt-8 text-sm md:text-lg rounded hover:bg-blue-700 focus:ring-4 focus:ring-blue-300"
+              disabled={loading}
+            >
+              {loading ? "Logging in.." : "Login"}
+            </button>
+            <p className="mt-3">Are you create new account? <Link className="font-semibold text-blue-600" to='/register' >Register</Link></p>
+          </form>
+
+
+
+          <div className="w-full flex justify-center items-center mt-8 py-8 px-5 md:px-10 bg-gray-100 rounded">
+            <div className="w-full text-xs md:text-[15px]">
+              <p className="mb-2">Email: naim.microdeft@gmail.com </p>
+              <p>Password: 12345678 </p>
+            </div>
+
+            <button
+              onClick={handleDataLogin}
+              className="text-white text-xs md:text-[15px] bg-blue-400 hover:bg-blue-500 duration-300 px-2 md:px-4 py-1 md:py-2 font-semibold rounded"
+            >
+              Login
+            </button>
+          </div>
+   
       </div>
-
-
-      <div className='w-full flex justify-center items-center mt-8'>
-        <div className='w-full  lg:w-1/4'>
-          <p>Email: naim.microdeft@gmail.com </p>
-          <p>Password: 12345678 </p>
-        </div>
-
-        <button onClick={handleDataLogin} className='text-white bg-blue-400 px-4 py-1 font-semibold rounded' >Login</button>
-      </div>
-
-
     </div>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;
